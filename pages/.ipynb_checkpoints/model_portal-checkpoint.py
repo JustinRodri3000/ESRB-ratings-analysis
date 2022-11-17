@@ -161,7 +161,7 @@ user_descriptors = st.multiselect('Descriptors', descriptor_list)
 
 fig = px.pie(df, values=df['esrb_rating'].value_counts(), names = df['esrb_rating'].value_counts().index, title='ESRB ratings')
 
-st.image(fig)
+st.plotly_chart(fig, sharing="streamlit")
 
 clicked = st.button('Try out the Predictor?')
 
