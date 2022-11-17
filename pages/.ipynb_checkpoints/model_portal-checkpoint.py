@@ -160,7 +160,8 @@ descriptor_list.remove("num_descriptors")
 user_descriptors = st.multiselect('Descriptors', descriptor_list)
 
 fig = px.pie(df, values=df['esrb_rating'].value_counts(), names = df['esrb_rating'].value_counts().index, title='ESRB ratings')
-fig.show()
+
+st.image(fig)
 
 clicked = st.button('Try out the Predictor?')
 
