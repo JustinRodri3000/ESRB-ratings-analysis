@@ -40,6 +40,8 @@ from sklearn.ensemble import RandomForestClassifier
 # Library for visualizing our tree
 # If you get an error, run 'conda install python-graphviz' in your terminal (without the quotes).
 #import graphviz
+import json
+import datetime
 
 df = pd.read_csv("Video_games_esrb_rating.csv")
 
@@ -156,6 +158,9 @@ descriptor_list = selected_features.copy()
 descriptor_list.remove("num_descriptors")
 
 user_descriptors = st.multiselect('Descriptors', descriptor_list)
+
+fig = px.pie(df, values=df['esrb_rating'].value_counts(), names = df['esrb_rating'].value_counts().index, title='ESRB ratings')
+fig.show()
 
 clicked = st.button('Try out the Predictor?')
 

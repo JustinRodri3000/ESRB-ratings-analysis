@@ -9,9 +9,12 @@ st.set_page_config(
 )
 
 # Create a page header
-st.header("Welcome to my homepage! 👋")
+st.header("Welcome to our ESRB homepage! 👋")
 
+st.write('This is our ESRB rating exploratory web app. Fell free to have a look around')
 
+    # display a picture
+st.image('images/ESRBhome.png')
 # Create three columns 
 col1, col2, col3 = st.columns([1,1,1])
 
