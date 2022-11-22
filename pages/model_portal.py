@@ -1,6 +1,6 @@
 # need to remove all the """ strings
 
-# Do not use upyter Notebook
+# Do not use jupyter Notebook
 
 # takes too long
 
@@ -12,36 +12,21 @@ import streamlit as st
 
 import plotly.express as px
 
-import matplotlib.pyplot as plt
 import seaborn as sns
 
 sns.set()
 
-# Import the trees from sklearn
-from sklearn import tree
 
-# Helper function to split our data
-from sklearn.model_selection import train_test_split
 
-# Helper fuctions to evaluate our model.
-from sklearn.metrics import accuracy_score, precision_score, recall_score, confusion_matrix, f1_score, roc_auc_score
-from sklearn.metrics import classification_report, confusion_matrix
-from sklearn import metrics
-
-# Helper function for hyper-parameter turning.
-from sklearn.model_selection import GridSearchCV
-
-# Import our Decision Tree
-from sklearn.tree import DecisionTreeClassifier
 
 # Import our Random Forest
 from sklearn.ensemble import RandomForestClassifier
 
 # Library for visualizing our tree
 # If you get an error, run 'conda install python-graphviz' in your terminal (without the quotes).
-#import graphviz
-import json
-import datetime
+# import graphviz
+# import json
+# import datetime
 
 df = pd.read_csv("Video_games_esrb_rating.csv")
 
@@ -98,12 +83,6 @@ selected_features.remove("no_descriptors")
 # and makes user input easier
 
 
-X = df[selected_features]
-
-y = df["esrb_rating"]
-
-X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=45)
-
 final_model = RandomForestClassifier()
 
 X = df[selected_features]
@@ -112,9 +91,7 @@ y = df["esrb_rating"]
 
 final_model.fit(X, y)
 
-y_pred = final_model.predict(X_test)
 
-y_pred = final_model.predict(X)
 
 # Streamlit App
 
@@ -126,7 +103,7 @@ st.set_page_config(
     page_icon="👋",
 )
 
-st.header("Videogame ESRB Prediction Project")
+st.header("Video Game ESRB Prediction Project")
 
 # do not use JupiterNotebook takes forever
 
@@ -139,6 +116,19 @@ st.subheader('First 5 rows of the data after some cleaning.')
 
 st.dataframe(df[:5])
 
+fig = px.pie(df,
+             values=df['esrb_rating'].value_counts(),
+             names = df['esrb_rating'].value_counts().index,
+             title='Data distribution',
+             color=df['esrb_rating'].value_counts().index,
+             color_discrete_map={'E': 'lightcyan',
+                                 'ET': 'cyan',
+                                 'M': 'darkblue',
+                                 'T': 'royalblue'}
+             )
+
+st.plotly_chart(fig, sharing="streamlit")
+
 st.subheader('Rating Predictor.')
 
 st.write(
@@ -146,7 +136,7 @@ st.write(
 
 st.write("If you want to see the prediction for a game without any descriptors just hit the predictor button")
 
-# maybe better to use the multiselect as opposed to input
+# maybe better to use the multiselect as opposed to input,
 # but I think this is easier to set up for now
 
 
@@ -159,9 +149,7 @@ descriptor_list.remove("num_descriptors")
 
 user_descriptors = st.multiselect('Descriptors', descriptor_list)
 
-fig = px.pie(df, values=df['esrb_rating'].value_counts(), names = df['esrb_rating'].value_counts().index, title='ESRB ratings')
 
-st.plotly_chart(fig, sharing="streamlit")
 
 clicked = st.button('Try out the Predictor?')
 
@@ -189,15 +177,26 @@ if (clicked):
 
     st.write("The model predicted that your game will be")
 
-    st.write(y_pred)
+    st.write('### '+y_pred[0][0])
 
     y_pred_proba = final_model.predict_proba(new_game_df)
 
-    st.write("The probability for each of the categories in order of E, ET, M and T are")
+    st.write("The probability for each of the categories are:")
+    y_pred_df = pd.DataFrame(
+        data=[y_pred_proba[0]],
+        columns=["E",'ET','M','T'])
+    y_pred_df=y_pred_df.iloc[:, [0, 1, 3, 2]]
+    st.table(y_pred_df)
 
-    st.write(y_pred_proba)
-    print(y_pred_proba)
+    fig = px.pie(y_pred_proba,
+                 names=['E','ET','M','T'],
+                 values=y_pred_proba[0],
+                 title='ESRB ratings',
+                 color=['E','ET','M','T'],
+                 color_discrete_map={'E': 'lightcyan',
+                                     'ET': 'cyan',
+                                     'M': 'darkblue',
+                                     'T': 'royalblue'})
 
-    fig = px.pie(y_pred_proba, names=['E','ET','M','T'], values=y_pred_proba[0], title='ESRB ratings')
 
     st.plotly_chart(fig, sharing="streamlit")
