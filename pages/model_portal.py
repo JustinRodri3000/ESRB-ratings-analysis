@@ -177,12 +177,13 @@ if (clicked):
 
     st.write("The model predicted that your game will be")
 
-    st.write('### '+y_pred[0][0])
+    st.write('### '+y_pred[0])
 
     y_pred_proba = final_model.predict_proba(new_game_df)
 
     st.write("The probability for each of the categories are:")
     arr= y_pred_proba[0]
+
 
 
 
