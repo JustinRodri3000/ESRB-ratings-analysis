@@ -196,3 +196,8 @@ if (clicked):
     st.write("The probability for each of the categories in order of E, ET, M and T are")
 
     st.write(y_pred_proba)
+    print(y_pred_proba)
+
+    fig = px.pie(y_pred_proba, names=['E','ET','M','T'], values=y_pred_proba[0], title='ESRB ratings')
+
+    st.plotly_chart(fig, sharing="streamlit")
