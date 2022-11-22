@@ -182,11 +182,14 @@ if (clicked):
     y_pred_proba = final_model.predict_proba(new_game_df)
 
     st.write("The probability for each of the categories are:")
-    y_pred_df = pd.DataFrame(
-        data=[y_pred_proba[0]],
-        columns=["E",'ET','M','T'])
-    y_pred_df=y_pred_df.iloc[:, [0, 1, 3, 2]]
-    st.table(y_pred_df)
+    arr= y_pred_proba[0]
+
+
+
+    st.write('- E:  ' + str(round(y_pred_proba[0][0], 2)))
+    st.write('- ET: ' + str(round(y_pred_proba[0][1], 2)))
+    st.write('- T:  ' + str(round(y_pred_proba[0][3], 2)))
+    st.write('- M:  ' + str(round(y_pred_proba[0][2], 2)))
 
     fig = px.pie(y_pred_proba,
                  names=['E','ET','M','T'],
