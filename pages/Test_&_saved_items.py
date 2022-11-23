@@ -10,9 +10,7 @@ import pickle
 print("hi")
 
 model = pickle.load(open('../Model/ESRB_model.pkl', 'rb'))
-
 print(model)
-
 # table
 '''y_pred_df = pd.DataFrame(
     data=[y_pred_proba[0]],
