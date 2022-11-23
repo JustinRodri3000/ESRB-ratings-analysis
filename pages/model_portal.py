@@ -12,6 +12,8 @@ import streamlit as st
 
 import plotly.express as px
 
+import pickle
+
 import seaborn as sns
 
 sns.set()
@@ -172,6 +174,8 @@ if (clicked):
     new_game_values.append(count)
 
     new_game_df = pd.DataFrame([new_game_values], columns=selected_features)
+
+    final_model= pickle.load(open('Model/ESRB_model.pkl', 'rb'))
 
     y_pred = final_model.predict(new_game_df)
 
